@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sobre o Projeto - Do Zero ao Emprego</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Variáveis de Cores */
+    :root {
+        --primary-blue: #007bff;
+        --dark-blue: #0056b3;
+        --light-blue: #e0f2ff;
+        --text-dark: #333;
+        --text-medium: #555;
+        --text-light: #777;
+        --background-light: #f4f7fa;
+        --background-white: #ffffff;
+        --border-light: #cce5ff;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
+
+    /* Estilos Globais */
+    body {
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.6;
+        color: var(--text-dark);
+        background-color: var(--background-light);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 960px;
+        margin: 30px auto;
+        padding: 30px;
+        background-color: var(--background-white);
+        border-radius: 12px;
+        box-shadow: 0 6px 15px var(--shadow-light);
+        flex-grow: 1;
+    }
+
+    /* Cabeçalho */
+    header {
+        text-align: center;
+        background-color: var(--primary-blue);
+        padding: 10px 0;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        box-shadow: 0 4px 10px var(--shadow-light);
+    }
+
+    /* Navegação */
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    nav li {
+        margin: 0 20px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        font-size: 1.1em;
+        padding: 5px 0;
+        position: relative;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    nav a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 3px;
+        background-color: white;
+        left: 50%;
+        bottom: -5px;
+        transform: translateX(-50%);
+        transition: width 0.3s ease;
+    }
+
+    nav a:hover::after,
+    nav a.active::after {
+        width: 100%;
+    }
+
+    /* Títulos de Seção (h2) */
+    h2 {
+        color: var(--primary-blue);
+        font-size: 2.2em;
+        margin-bottom: 15px;
+        text-align: center;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 3px;
+        background-color: var(--dark-blue);
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+    }
+
+    p.subtitulo-secao {
+        color: var(--text-medium);
+        font-size: 1.05em;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Conteúdo da Página "Sobre" */
+    .about-content {
+        padding: 20px;
+        line-height: 1.8;
+        font-size: 1.05em;
+        color: var(--text-dark);
+    }
+
+    .about-content h3 {
+        color: var(--dark-blue);
+        font-size: 1.6em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid var(--border-light);
+        padding-bottom: 5px;
+        text-align: center;
+        position: relative;
+    }
+
+    /* Linha abaixo do h3, centralizada */
+    .about-content h3::after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 2px;
+        background-color: var(--dark-blue);
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -5px;
+    }
+
+    .about-content p {
+        margin-bottom: 15px;
+        text-align: justify;
+    }
+
+    .about-content ul {
+        list-style: disc;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        margin-bottom: 15px;
+        color: var(--text-dark);
+        text-align: left;
+    }
+
+    .about-content ul li {
+        margin-bottom: 8px;
+    }
+
+    /* Estilos para as galerias de imagens */
+    .image-gallery {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: -10px; /* Ajuste para a galeria superior */
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .image-gallery.bottom { /* Classe específica para a galeria inferior */
+        margin-top: 20px; /* Espaço maior acima para separar do texto */
+        margin-bottom: 30px;
+    }
+
+
+    .image-gallery img {
+        width: 150px; /* Largura fixa para as imagens */
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+    }
+
+    /* Rodapé */
+    footer {
+        text-align: center;
+        padding: 10px 0; /* Rodapé pequeno */
+        margin-top: 40px;
+        background-color: var(--primary-blue); /* Fundo azul padrão do site */
+        color: white; /* Cor do texto padrão para o rodapé */
+        font-size: 0.9em;
+        border-top: none; /* Sem borda superior */
+        box-shadow: none; /* Sem sombra no rodapé para um visual mais limpo */
+        border-radius: 0; /* Garante que não haja arredondamento herdado */
+    }
+
+    footer .container { /* Estilo específico para o container dentro do footer */
+        padding: 0; /* Remover padding do container para que o fundo azul cubra toda a largura */
+        margin: 0 auto; /* Centraliza o container, mas a cor de fundo do footer o cobrirá */
+        max-width: 100%; /* Garante que o container não restrinja a largura do footer */
+        box-shadow: none; /* Remove a sombra do container dentro do footer */
+        border-radius: 0; /* Remove arredondamento do container dentro do footer */
+        background-color: transparent; /* Garante que o container não tenha fundo branco */
+    }
+
+    footer p {
+        margin: 0; /* Remove margens padrão do parágrafo */
+        color: white; /* Garante que o texto do parágrafo seja branco */
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="entrevista.html">Simulação de Entrevista</a></li>
+        <li><a href="dicas.html">Dicas</a></li>
+        <li><a href="curriculo.html">Gerador de Currículo</a></li>
+        <li><a href="sobre.html" class="active">Sobre o Projeto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="container">
+  <section id="sobre-o-projeto">
+    <h2>Do Zero ao Emprego: Workshop completo com ChatGPT</h2>
+    <p class="subtitulo-secao">Desenvolvimento de uma Solução Tecnológica para Redução de Barreiras no Acesso ao Primeiro Emprego.</p>
+
+    <div class="image-gallery">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyk8tX_Oi2WsKyMHwT_KOkQxW8CwO8S2_FGQ&s" alt="Fluxo de trabalho">
+      <img src="https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Interface do sistema">
+    </div>
+
+    <div class="about-content">
+      <p>A dificuldade de jovens no mercado de trabalho é evidente: a taxa de desocupação entre 18 e 24 anos é de 16,4% (IBGE, jan/2025), quase o dobro da média geral. Muitos currículos de iniciantes contêm erros (72%, Catho 2024), e a maioria dos estudantes se sente insegura para entrevistas (68%, Cia de Estágios), além de haver uma lacuna nas habilidades exigidas pelo mercado. O projeto propõe um workshop focado em preparar estudantes para o ingresso no mercado de trabalho, abordando a criação de currículos eficazes e a preparação para entrevistas. A iniciativa inovadora utiliza a inteligência artificial (ChatGPT) para simular entrevistas e fornecer feedback personalizado, visando aprimorar as habilidades de comunicação e apresentação dos participantes. O objetivo principal é fornecer as ferramentas práticas e relevantes necessárias para que os estudantes alcancem sucesso nos processos seletivos. Ao final deste projeto, esperamos que os jovens estejam significativamente mais preparados e confiantes para enfrentar os desafios do mercado de trabalho, aumentando substancialmente suas chances de alcançar o tão desejado primeiro emprego.</p>
+
+      <h3>Nossa Visão</h3>
+      <p>O projeto surge no contexto do <strong>Projeto Aplicado ACEX</strong>, desenvolvido na faculdade <strong> Fundação Santo André</strong></strong>, com o objetivo de <strong>capacitar jovens para o mercado de trabalho</strong>, <strong>democratizar o acesso à tecnologia</strong> e <strong>promover a inclusão social</strong>. Utilizando recursos de <strong>inteligência artificial</strong>, como o ChatGPT, a iniciativa oferece suporte personalizado para o aprimoramento de habilidades fundamentais, como a criação de currículos e a <strong>preparação para entrevistas</strong>. Por meio de oficinas práticas, simulações interativas, orientações contínuas, os participantes identificam seus pontos fortes, corrigem erros comuns e desenvolvem maior segurança ao se apresentar em <strong>processos seletivos</strong>. A proposta fortalece a autonomia, amplia a empregabilidade e proporciona aos jovens as <strong>ferramentas necessárias</strong> para se aproximarem do mercado de trabalho com mais preparo, confiança e clareza em seus objetivos.</p>
+
+      <h3>O Que Oferecemos</h3>
+      <ul>
+        <li><strong>Simulação de Entrevista:</strong> Prepare-se para entrevistas de emprego com nosso simulador interativo, que gera perguntas personalizadas usando inteligência artificial e ajuda você a praticar respostas eficazes.</li>
+        <li><strong>Dicas Essenciais:</strong> Tenha acesso a conteúdos exclusivos com orientações valiosas sobre postura em entrevistas, construção de networking e estratégias para se destacar no mercado de trabalho.</li>
+        <li><strong>Gerador de Currículo:</strong> Crie um currículo profissional de forma rápida e fácil, destacando suas melhores qualidades e experiências, mesmo sem experiência formal.</li>
+      </ul>
+
+      <h3>Nosso Compromisso</h3>
+      <p>Nos comprometemos a realizar apresentações dinâmicas e interativas em escolas, levando diretamente aos estudantes uma experiência prática e envolvente que os prepara de forma concreta para os desafios do mercado de trabalho. Durante essas visitas, oferecemos oficinas presenciais onde os alunos podem explorar nosso site interativo, que disponibiliza ferramentas acessíveis e fáceis de usar para a criação de currículos profissionais, a prática de entrevistas simuladas com suporte de inteligência artificial e o desenvolvimento de habilidades essenciais para a inserção no mundo profissional. Nosso objetivo é proporcionar um ambiente acolhedor e educativo, no qual cada estudante se sinta motivado e capacitado para aprimorar suas competências, fortalecer sua autoconfiança e ampliar suas chances de sucesso nos processos seletivos futuros.</p>
+
+      <div class="image-gallery bottom">
+        <img src="https://images.pexels.com/photos/15189552/pexels-photo-15189552/free-photo-of-pessoas-mesas-treinamento-monitor.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Alunos em workshop">
+        <img src="https://media.istockphoto.com/id/1221837194/pt/foto/man-holds-his-brazilian-document-work-and-social-security.jpg?b=1&s=612x612&w=0&k=20&c=DPUjtvqYzI8oa-2KdE1kgyiEwmb_42usXnpp50CG0cU=" alt="Interação com tecnologia">
+        <img src="https://images.pexels.com/photos/267582/pexels-photo-267582.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Interação com tecnologia">
+      </div>
+      <p><strong>Junte-se a nós nesta jornada e transforme o desafio de conseguir o primeiro emprego em uma experiência de sucesso!</strong></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Do Zero ao Emprego. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+</body>
+</html>

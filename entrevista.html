@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simulação de Entrevista - Emprego Jovem</title>
+<style>
+/* Seus estilos CSS existentes (mantive os anteriores para referência, mas use os seus) */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; background-color: #f9f9f9;
+  display: flex; flex-direction: column; min-height: 100vh;
+  color: #222;
+}
+header, footer {
+  background-color: #1E90FF;
+  color: white;
+  padding: 8px 0;
+  text-align: center;
+  /* AUMENTADO: Tamanho da fonte para cabeçalho e rodapé */
+  font-size: 1em; /* Era 0.85em, agora mais legível */
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 0; margin: 5px 0;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: color 0.3s ease;
+}
+nav a:hover {
+  color: #dff0ff;
+}
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto 30px auto;
+  flex-grow: 1;
+}
+main {
+  padding: 20px 25px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.07);
+}
+main h1 {
+  color: #1E90FF;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+main p {
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  text-align: center;
+}
+form label {
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
+  color: #333;
+  font-size: 0.95em;
+}
+
+/* Estilos específicos da simulação */
+#simulacao-entrevista {
+  margin-top: 20px;
+}
+
+#pergunta-resposta {
+  background-color: #e0f2f7;
+  border: 1px solid #b3e0ed;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+#pergunta {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #0056b3;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+#feedback {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  color: #155724;
+  font-size: 0.95em;
+}
+
+/* Melhoria para a caixa de resposta do aluno */
+#form-resposta {
+  margin-top: 25px; /* Aumenta o espaço acima do formulário de resposta */
+  padding: 20px;
+  background-color: #f0f8ff; /* Um azul claro de fundo */
+  border: 1px solid #cceeff; /* Borda suave */
+  border-radius: 10px; /* Mais arredondado */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Sombra mais sutil */
+}
+
+#form-resposta label {
+  font-size: 1.05em;
+  color: #0056b3; /* Cor azul mais forte para a label */
+  margin-bottom: 8px; /* Espaço abaixo da label */
+}
+
+#resposta {
+  width: 100%;
+  padding: 12px 15px; /* Aumenta o padding */
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 2px solid #a0d9ff; /* Borda mais pronunciada e azul clara */
+  border-radius: 8px; /* Borda mais arredondada */
+  font-size: 1em;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 120px; /* Aumenta a altura mínima */
+  line-height: 1.5; /* Melhora a legibilidade do texto */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#resposta:focus {
+  border-color: #1E90FF; /* Borda azul mais escura ao focar */
+  box-shadow: 0 0 8px rgba(30, 144, 255, 0.3); /* Sombra suave ao focar */
+  outline: none;
+}
+
+#form-resposta button {
+  padding: 12px 28px; /* Aumenta o padding do botão */
+  background-color: #1E90FF; /* Cor azul principal */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Borda mais arredondada */
+  font-size: 1.05em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: block; /* Garante que o botão ocupe sua própria linha */
+  margin: 0 auto; /* Centraliza o botão */
+  width: auto; /* Ajusta a largura ao conteúdo */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1); /* Sombra para o botão */
+}
+
+#form-resposta button:hover {
+  background-color: #1a7ae1; /* Azul mais escuro no hover */
+  transform: translateY(-1px); /* Pequeno efeito de "levantar" */
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2); /* Sombra mais pronunciada no hover */
+}
+
+
+footer p {
+  text-align: center;
+  margin: 0;
+  /* AUMENTADO: Tamanho da fonte do parágrafo no rodapé */
+  font-size: 1em; /* Era 0.85em, agora mais legível */
+  color: #dff0ff;
+}
+
+/* Melhorias para as caixas de mensagem */
+.message-box {
+  margin-bottom: 15px; /* Mais espaço entre as mensagens */
+  padding: 15px; /* Aumenta o padding */
+  border-radius: 12px; /* Mais arredondado */
+  line-height: 1.5; /* Melhor legibilidade */
+  word-wrap: break-word; /* Garante que o texto quebre linhas longas */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra sutil para todas as caixas */
+}
+
+.message-box.assistant {
+  background-color: #e0f7fa; /* Azul claro para a IA */
+  border: 1px solid #b2ebf2; /* Borda azul mais clara */
+  text-align: left;
+  position: relative; /* Para posicionar o logo */
+  padding-left: 55px; /* Espaço para o logo */
+  min-height: 40px; /* Garante espaço para o logo */
+}
+    .message-box.assistant::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 10px; /* Posição do logo */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px; /* Tamanho do logo */
+  height: 35px; /* Tamanho do logo */
+  /* Substitua 'URL_DA_SUA_IMAGEM_AQUI' pelo link real da sua imagem */
+  background-image: url('data:image/png;base64,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');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent; /* Ou uma cor se não tiver imagem */
+  border-radius: 50%; /* Se o logo for redondo */
+}
+
+.message-box.user {
+  background-color: #e3f2fd; /* Azul um pouco mais escuro para o usuário */
+  border: 1px solid #bbdefb;
+  text-align: right;
+  margin-left: auto; /* Alinha à direita */
+  max-width: 90%; /* Limita a largura */
+  padding-right: 15px; /* Mantém o padding */
+}
+
+/* Estilo para a caixa "Iniciando simulação de entrevista..." (system message) */
+.message-box.system {
+  background-color: #f0f0f0; /* Cinza claro, menos chamativo que o laranja */
+  border: 1px solid #ddd; /* Borda cinza suave */
+  color: #666; /* Texto cinza escuro */
+  font-size: 0.9em; /* Menor que o padrão */
+  padding: 8px 15px; /* Menor padding */
+  border-radius: 8px; /* Menos arredondado para ser mais discreto */
+  text-align: center;
+  font-weight: normal; /* Sem negrito */
+  font-style: italic; /* Adiciona uma leve inclinação para indicar um status */
+  margin-top: 10px; /* Ajuste a margem superior se necessário */
+  max-width: fit-content; /* Faz a caixa se ajustar ao conteúdo */
+  margin-left: auto;
+  margin-right: auto; /* Centraliza a caixa */
+  box-shadow: none; /* Remove a sombra para ser mais discreto */
+}
+
+
+/* Melhorias para a área inicial (area-input) */
+#area-input {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  margin-top: 30px; /* Adiciona um pouco mais de espaço acima */
+}
+
+#area-input label {
+  font-size: 1.15em; /* Aumenta o tamanho da fonte para a label */
+  font-weight: 700; /* Deixa a label mais negrita */
+  color: #1E90FF; /* Cor azul do tema */
+  margin-bottom: 15px; /* Mais espaço abaixo da label */
+  display: block; /* Garante que a label ocupe toda a largura */
+}
+
+#area-input input[type="text"] {
+  width: 75%; /* Ajusta a largura para não ser 100% */
+  max-width: 400px; /* Limita a largura máxima do input */
+  padding: 10px 15px; /* Aumenta o padding para melhor toque/clique */
+  border: 2px solid #a0d9ff; /* Borda mais pronunciada e azul clara */
+  border-radius: 8px; /* Borda mais arredondada */
+  font-size: 1.05em; /* Aumenta o tamanho da fonte no input */
+  margin-bottom: 20px; /* Mais espaço abaixo do input */
+  text-align: left; /* Alinha o texto à esquerda */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição suave */
+}
+
+#area-input input[type="text"]:focus {
+  border-color: #1E90FF; /* Borda azul mais escura ao focar */
+  box-shadow: 0 0 8px rgba(30, 144, 255, 0.3); /* Sombra suave ao focar */
+  outline: none; /* Remove o outline padrão do navegador */
+}
+
+#area-input button {
+  padding: 12px 28px; /* Aumenta o padding do botão */
+  background-color: #28a745; /* Um verde mais vibrante para o botão de ação */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Borda mais arredondada */
+  font-size: 1.1em; /* Aumenta o tamanho da fonte */
+  font-weight: 600; /* Mais negrito */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Adiciona transição de transformação */
+  display: inline-block; /* Para centralizar melhor */
+  width: auto; /* Deixa a largura automática */
+}
+
+#area-input button:hover {
+  background-color: #218838; /* Um verde mais escuro no hover */
+  transform: translateY(-2px); /* Pequeno efeito de "levantar" no hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra no hover */
+}
+
+#loading {
+  font-size: 1.0em;
+  color: #666;
+  margin-top: 20px;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="entrevista.html">Simulação de Entrevista</a></li>
+        <li><a href="dicas.html">Dicas</a></li>
+        <li><a href="curriculo.html">Gerador de Currículo</a></li>
+        <li><a href="sobre.html">Sobre o Projeto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section id="simulacao">
+    <h1>Simulação de Entrevista</h1>
+    <p>Prepare-se para entrevistas de emprego praticando com nosso assistente de IA. Informe sua área de interesse para começarmos.</p>
+
+    <div id="area-input">
+      <label for="area">Sua Área de Interesse:</label>
+      <input type="text" id="area" placeholder="Ex: Tecnologia, Administrativa, Vendas" required>
+      <button onclick="iniciarSimulacao()">Iniciar Simulação</button>
+    </div>
+
+    <div id="pergunta-resposta" style="display:none;">
+      <div id="chat-container">
+        </div>
+      <div id="loading" style="display:none; text-align: center; margin-top: 15px;">
+    <p>Aguardando resposta da IA...</p>
+</div>
+
+      <div id="form-resposta">
+        <label for="resposta">Sua Resposta:</label>
+        <textarea id="resposta" rows="6" placeholder="Digite sua resposta aqui..." required></textarea>
+        <button onclick="enviarResposta()">Enviar Resposta</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Emprego Jovem - Gerando oportunidades!</p>
+  </div>
+</footer>
+
+<script>
+    // Variáveis globais para a simulação com IA
+    let historicoConversa = []; // Armazena as mensagens no formato {role: "user", content: "..."} ou {role: "assistant", content: "..."}
+    let perguntaAtualIA = ""; // Para armazenar a última pergunta feita pela IA
+    let isWaitingForAI = false; // Para evitar múltiplas requisições enquanto a IA processa
+
+    // URL do seu Cloudflare Worker
+    const WORKER_URL = 'https://simulacao.giovanisiqueira2003.workers.dev/'; 
+
+    // --- Funções de Ajuda ---
+
+    // Adiciona uma mensagem ao histórico e exibe na tela
+    function adicionarMensagemNaTela(remetente, texto) {
+        const chatContainer = document.getElementById('chat-container');
+        const messageBox = document.createElement('div');
+        messageBox.classList.add('message-box', remetente); // user, assistant, system
+        messageBox.innerHTML = `<p>${texto}</p>`;
+        chatContainer.appendChild(messageBox);
+        chatContainer.scrollTop = chatContainer.scrollHeight; // Rola para o final da conversa
+    }
+
+    // Exibe/Oculta o indicador de carregamento
+    function toggleLoading(show) {
+        const loadingDiv = document.getElementById('loading');
+        const formRespostaDiv = document.getElementById('form-resposta');
+        if (loadingDiv) loadingDiv.style.display = show ? 'block' : 'none';
+        if (formRespostaDiv) formRespostaDiv.style.display = show ? 'none' : 'block';
+    }
+
+    // Função para chamar o Cloudflare Worker
+    async function getAIReponseFromWorker(userPrompt, history) {
+        toggleLoading(true); // Mostrar carregamento
+        isWaitingForAI = true; // Definir que estamos esperando a IA
+
+        try {
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: userPrompt, history: history }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Erro do Worker:", errorData);
+                throw new Error(`Erro na comunicação com a IA: ${errorData.error || 'Erro desconhecido'}`);
+            }
+
+            const data = await response.json();
+            return data; 
+
+        } catch (error) {
+            console.error("Erro ao chamar o Worker:", error);
+            throw new Error(`Erro de rede ao tentar conectar com a IA: ${error.message}`);
+        } finally {
+            toggleLoading(false); // Esconder carregamento
+            isWaitingForAI = false; // Liberar para nova requisição
+        }
+    }
+
+    // --- Funções de Simulação de Entrevista ---
+
+    async function iniciarSimulacao() {
+        // debugger; // REMOVIDO PARA PRODUÇÃO
+        // alert("iniciarSimulacao() foi chamada!"); // REMOVIDO PARA PRODUÇÃO
+
+        const area = document.getElementById("area").value.trim();
+        if (!area) {
+            alert("Por favor, informe sua área de interesse.");
+            return;
+        }
+
+        // Resetar o estado da simulação
+        historicoConversa = [];
+        perguntaAtualIA = "";
+        const chatContainer = document.getElementById("chat-container");
+        if (chatContainer) chatContainer.innerHTML = ""; // Limpa o chat
+        
+        document.getElementById("pergunta-resposta").style.display = "block";
+        document.getElementById("area-input").style.display = "none"; // Esconder input da área
+
+        adicionarMensagemNaTela('system', 'Iniciando simulação de entrevista...');
+
+        // Prompt inicial para a IA para começar a entrevista, ajustado para jovens inexperientes
+        const promptInicial = `Você é um entrevistador de primeiro emprego, focado em jovens sem experiência formal. Faça perguntas de entrevista, uma por vez, levando em conta que o candidato é inexperiente e buscando seu primeiro emprego na área de ${area}. As perguntas devem ser diretas, mas permitir que o jovem demonstre potencial, vontade de aprender e habilidades transferíveis. Seja objetivo e faça a primeira pergunta.`;
+
+        // Adiciona a "instrução" inicial para o histórico da IA (não é uma mensagem do usuário)
+        // Isso ajuda a IA a manter o papel de entrevistador
+        historicoConversa.push({ role: "system", content: promptInicial });
+
+        try {
+            const respostaIA = await getAIReponseFromWorker(promptInicial, historicoConversa);
+
+            if (respostaIA.type === 'resposta_ia') {
+                perguntaAtualIA = respostaIA.content; // Armazena a pergunta para uso futuro
+                adicionarMensagemNaTela('assistant', perguntaAtualIA); // Exibe a pergunta da IA
+                historicoConversa.push({ role: "assistant", content: perguntaAtualIA }); // Adiciona ao histórico
+
+            } else {
+                adicionarMensagemNaTela('system', `Erro ao iniciar entrevista: ${respostaIA.content}`);
+                // Voltar a exibir o input da área em caso de erro crítico
+                document.getElementById("area-input").style.display = "block";
+                document.getElementById("pergunta-resposta").style.display = "none";
+            }
+        } catch (error) {
+            adicionarMensagemNaTela('system', `Erro grave ao iniciar: ${error.message}`);
+            // Voltar a exibir o input da área em caso de erro crítico
+            document.getElementById("area-input").style.display = "block";
+            document.getElementById("pergunta-resposta").style.display = "none";
+        }
+    }
+
+    async function enviarResposta() {
+        // debugger; // REMOVIDO PARA PRODUÇÃO
+        // alert("enviarResposta() foi chamada!"); // REMOVIDO PARA PRODUÇÃO
+
+        if (isWaitingForAI) {
+            alert("Por favor, aguarde a IA processar a resposta anterior.");
+            return;
+        }
+
+        const respostaUsuario = document.getElementById("resposta").value.trim();
+        if (!respostaUsuario) {
+            alert("Por favor, escreva sua resposta.");
+            return;
+        }
+
+        // Adiciona a resposta do usuário ao histórico da conversa
+        adicionarMensagemNaTela('user', respostaUsuario);
+        historicoConversa.push({ role: "user", content: respostaUsuario });
+
+        // Limpa o campo de resposta
+        document.getElementById("resposta").value = "";
+
+        // Prepara o prompt para a próxima pergunta da IA
+        // Pedimos que a IA faça a PRÓXIMA pergunta, levando em conta o que foi dito.
+        const promptParaProximaPergunta = `Eu respondi à sua última pergunta. Agora, faça a próxima pergunta da entrevista.`;
+
+        try {
+            const respostaIA = await getAIReponseFromWorker(promptParaProximaPergunta, historicoConversa);
+
+            if (respostaIA.type === 'resposta_ia') {
+                perguntaAtualIA = respostaIA.content; // Armazena a nova pergunta da IA
+                adicionarMensagemNaTela('assistant', perguntaAtualIA); // Exibe a nova pergunta
+                historicoConversa.push({ role: "assistant", content: perguntaAtualIA }); // Adiciona ao histórico
+
+            } else {
+                adicionarMensagemNaTela('system', `Erro ao obter próxima pergunta: ${respostaIA.content}`);
+            }
+        } catch (error) {
+            adicionarMensagemNaTela('system', `Erro grave na resposta: ${error.message}`);
+        }
+    }
+</script>
+</body>
+</html>

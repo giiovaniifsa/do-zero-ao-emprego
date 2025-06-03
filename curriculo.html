@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gerador de Currículo - Emprego Jovem</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; background-color: #f9f9f9;
+    display: flex; flex-direction: column; min-height: 100vh;
+    color: #222;
+  }
+  header, footer {
+    background-color: #1E90FF;
+    color: white;
+    padding: 8px 0;
+    text-align: center;
+    font-size: 0.85em;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 0; margin: 5px 0;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    transition: color 0.3s ease;
+  }
+  nav a:hover {
+    color: #dff0ff;
+  }
+  .container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto 30px auto;
+    flex-grow: 1;
+  }
+  main {
+    padding: 20px 25px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.07);
+  }
+  main h1 {
+    color: #1E90FF;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  main p {
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  form label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+    color: #333;
+    font-size: 0.95em;
+  }
+  form input, form textarea {
+    width: 100%;
+    padding: 6px 9px;
+    margin-top: 3px;
+    margin-bottom: 10px;
+    border: 1.3px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    resize: vertical;
+    text-align: left;
+    letter-spacing: normal;
+  }
+  form textarea {
+    min-height: 70px;
+    line-height: 1.3;
+  }
+  form button {
+    padding: 10px 22px;
+    background-color: #1E90FF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.05em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 18px;
+    display: block;
+    width: fit-content;
+  }
+  form button:hover {
+    background-color: #1a7ae1;
+  }
+
+  /* Estilo do currículo gerado */
+  #resultado-curriculo {
+    margin-top: 25px;
+    padding: 15px 20px;
+    background-color: #f0f8ff;
+    border-radius: 6px;
+    border: 1px solid #add8e6;
+    font-size: 0.9em;
+    line-height: 1.25;
+    color: #222;
+  }
+  #resultado-curriculo h2 {
+    color: #1E90FF;
+    margin-top: 0;
+    border-bottom: 1.8px solid #1E90FF;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  #curriculo-texto {
+    padding: 8px 12px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.04);
+    white-space: pre-wrap;
+    text-align: left;
+    letter-spacing: normal;
+    /* Adicionado para garantir que o conteúdo do texto-currículo não se espalhe muito */
+    position: relative; /* Necessário para que a altura do getBoundingClientRect seja precisa */
+  }
+  #curriculo-texto h3 {
+    font-size: 1.5em;
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    text-align: left;
+    color: #1E90FF;
+    letter-spacing: 0.7px;
+  }
+  #curriculo-texto p {
+    margin: 3px 0;
+    text-align: left;
+  }
+  #curriculo-texto hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
+  }
+  #curriculo-texto h4 {
+    font-size: 1.1em;
+    margin: 10px 0 5px 0;
+    font-weight: 600;
+    border-bottom: 1px solid #1E90FF;
+    padding-bottom: 2px;
+    color: #1E90FF;
+    letter-spacing: 0.5px;
+    text-align: left;
+  }
+  #curriculo-texto ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: disc;
+    text-align: left;
+    line-height: 1.1;
+  }
+  #curriculo-texto ul li {
+    margin-bottom: 0;
+    line-height: inherit;
+    text-align: left;
+  }
+
+  #btn-download {
+    margin-top: 15px;
+    padding: 10px 22px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: fit-content;
+  }
+  #btn-download:hover {
+    background-color: #218838;
+  }
+
+  footer p {
+    text-align: center;
+    margin: 0;
+    font-size: 0.85em;
+    color: #dff0ff;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="entrevista.html">Simulação de Entrevista</a></li>
+        <li><a href="dicas.html">Dicas</a></li>
+        <li><a href="curriculo.html">Gerador de Currículo</a></li>
+        <li><a href="sobre.html">Sobre o Projeto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section id="gerador">
+    <h1>Gerador de Currículo</h1>
+    <p>Crie seu currículo de forma rápida e fácil. Preencha os campos abaixo e clique em "Gerar Currículo".</p>
+
+    <form id="form-curriculo">
+      <label for="nome">Nome Completo:</label>
+      <input type="text" id="nome" placeholder="Ex: João da Silva" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Ex: joao@email.com" required>
+
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="telefone" placeholder="Ex: (11) 99999-9999" required>
+
+      <label for="cidade">Cidade:</label>
+      <input type="text" id="cidade" placeholder="Ex: São Paulo" required>
+
+      <label for="dataNascimento">Data de Nascimento:</label>
+      <input type="date" id="dataNascimento" required>
+
+      <label for="resumo">Resumo Profissional:</label>
+      <textarea id="resumo" rows="5" placeholder="Ex: Estudante de ensino médio, com interesse em tecnologia e vontade de aprender." required></textarea>
+
+      <label for="formacao">Formação Acadêmica:</label>
+      <textarea id="formacao" rows="5" placeholder="Ex: Ensino Médio Completo - Escola Estadual Brasil, 2023" required></textarea>
+
+      <label for="experiencia">Experiência Profissional (opcional):</label>
+      <textarea id="experiencia" rows="5" placeholder="Ex: Estágio em loja de informática - Auxílio no atendimento e organização."></textarea>
+
+      <label for="habilidades">Habilidades (uma por linha ou separadas por vírgula):</label>
+      <textarea id="habilidades" rows="2" placeholder="Ex: Microsoft Office&#10;Comunicação&#10;Trabalho em equipe" required></textarea>
+
+      <label for="objetivo">Objetivo Profissional:</label>
+      <textarea id="objetivo" rows="3" placeholder="Ex: Busco oportunidade para iniciar carreira na área administrativa."></textarea>
+
+      <label for="certificacoes">Certificações e Cursos (uma por linha ou separadas por vírgula, opcionais):</label>
+      <textarea id="certificacoes" rows="2" placeholder="Ex: Curso de Excel Básico&#10;Inglês Básico"></textarea>
+
+      <label for="projetos">Projetos Pessoais (uma por linha ou separadas por vírgula, opcionais):</label>
+      <textarea id="projetos" rows="2" placeholder="Ex: Blog sobre tecnologia&#10;Aplicativo simples em Python"></textarea>
+
+      <label for="referencias">Referências (opcional):</label>
+      <textarea id="referencias" rows="3" placeholder="Ex: Maria Souza - Professora - (11) 99999-9999"></textarea>
+
+      <button type="button" onclick="gerarCurriculo()">Gerar Currículo</button>
+    </form>
+
+    <div id="resultado-curriculo" style="display:none;">
+      <h2>Currículo Gerado:</h2>
+      <div id="curriculo-texto"></div>
+      <button id="btn-download" onclick="gerarPDF()">Baixar em PDF</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Do Zero ao Emprego</p>
+  </div>
+</footer>
+
+<script>
+  window.onload = () => {}; // Sem preenchimento automático
+
+  function gerarCurriculo() {
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const cidade = document.getElementById('cidade').value.trim();
+    const dataNascimento = document.getElementById('dataNascimento').value;
+    const resumo = document.getElementById('resumo').value.trim();
+    const formacao = document.getElementById('formacao').value.trim();
+    const experiencia = document.getElementById('experiencia').value.trim();
+    const habilidadesRaw = document.getElementById('habilidades').value.trim();
+    const objetivo = document.getElementById('objetivo').value.trim();
+    const certificacoesRaw = document.getElementById('certificacoes').value.trim();
+    const projetosRaw = document.getElementById('projetos').value.trim();
+    const referencias = document.getElementById('referencias').value.trim();
+
+    // Validação básica dos campos obrigatórios
+    if (!nome || !email || !telefone || !cidade || !dataNascimento || !resumo || !formacao || habilidadesRaw === '') {
+      alert('Por favor, preencha todos os campos obrigatórios: Nome, Email, Telefone, Cidade, Data de Nascimento, Resumo Profissional, Formação Acadêmica e Habilidades.');
+      return;
+    }
+
+    // Função para separar por linhas ou vírgulas e remover entradas vazias
+    function splitItems(text) {
+      if (!text) return [];
+      return text
+        .split(/\r?\n|,/)
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
+    }
+
+    const habilidades = splitItems(habilidadesRaw);
+    const certificacoes = splitItems(certificacoesRaw);
+    const projetos = splitItems(projetosRaw);
+
+    // Formata a data de nascimento para dd/mm/yyyy
+    let dataNascFormatada = '';
+    if (dataNascimento) {
+      const partes = dataNascimento.split('-'); // Espera formato YYYY-MM-DD
+      if (partes.length === 3) {
+        dataNascFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+      }
+    }
+
+    // Construção do currículo em HTML
+    let curriculoTexto = `
+<h3>${nome}</h3>
+<p><strong>Email:</strong> ${email}</p>
+<p><strong>Telefone:</strong> ${telefone}</p>
+<p><strong>Cidade:</strong> ${cidade}</p>
+<p><strong>Data de Nascimento:</strong> ${dataNascFormatada}</p>
+<hr/>
+<h4 class="section-title">Resumo Profissional</h4>
+<p>${resumo}</p>
+<h4 class="section-title">Formação Acadêmica</h4>
+<p>${formacao}</p>
+`;
+
+    if (experiencia) {
+      curriculoTexto += `
+<h4 class="section-title">Experiência Profissional</h4>
+<p>${experiencia}</p>
+`;
+    }
+
+    if (habilidades.length > 0) {
+      curriculoTexto += `
+<h4 class="section-title">Habilidades</h4>
+<ul>
+  ${habilidades.map(h => `<li>${h}</li>`).join('')}
+</ul>
+`;
+    }
+
+    if (objetivo) {
+      curriculoTexto += `
+<h4 class="section-title">Objetivo Profissional</h4>
+<p>${objetivo}</p>
+`;
+    }
+
+    if (certificacoes.length > 0) {
+      curriculoTexto += `
+<h4 class="section-title">Certificações e Cursos</h4>
+<ul>
+  ${certificacoes.map(c => `<li>${c}</li>`).join('')}
+</ul>
+`;
+    }
+
+    if (projetos.length > 0) {
+      curriculoTexto += `
+<h4 class="section-title">Projetos Pessoais</h4>
+<ul>
+  ${projetos.map(p => `<li>${p}</li>`).join('')}
+</ul>
+`;
+    }
+
+    if (referencias) {
+      curriculoTexto += `
+<h4 class="section-title">Referências</h4>
+<p>${referencias}</p>
+`;
+    }
+
+    const resultado = document.getElementById('resultado-curriculo');
+    const curriculoDiv = document.getElementById('curriculo-texto');
+    curriculoDiv.innerHTML = curriculoTexto.trim();
+    resultado.style.display = 'block';
+
+    resultado.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Função de download do PDF - OTIMIZADA PARA QUEBRAS DE PÁGINA INTELIGENTES
+  async function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const curriculoDiv = document.getElementById('curriculo-texto');
+
+    // Margens do PDF em pontos (top, right, bottom, left)
+    const margin = {
+      top: 20,
+      right: 20,
+      bottom: 20,
+      left: 20
+    };
+
+    const pdf = new jsPDF({
+      unit: 'pt',
+      format: 'a4',
+      orientation: 'portrait'
+    });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const usableWidth = pdfWidth - margin.left - margin.right;
+    const usableHeight = pdfHeight - margin.top - margin.bottom;
+
+    // Temporariamente, para garantir que html2canvas capture o layout correto
+    const originalDisplay = curriculoDiv.style.display;
+    curriculoDiv.style.display = 'block'; // Garante que a div está visível para html2canvas
+
+    const elements = Array.from(curriculoDiv.children); // Pega todos os filhos diretos (h3, p, hr, h4, ul)
+
+    let currentY = margin.top; // Posição Y atual no PDF
+
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      let elementHeight = element.offsetHeight; // Altura do elemento no HTML
+      let elementHTML = element.outerHTML; // Conteúdo HTML completo do elemento
+
+      // Se o elemento for uma lista (ul) ou um parágrafo longo, ou um título de seção,
+      // precisamos ter certeza que ele não será cortado de forma feia.
+      // Renderiza cada elemento individualmente com html2canvas
+      const elementCanvas = await html2canvas(element, { scale: 2 });
+      const elementImgData = elementCanvas.toDataURL('image/png');
+
+      // Calcule a altura real do elemento em pt no PDF, considerando a escala
+      const elementImgProps = pdf.getImageProperties(elementImgData);
+      const elementPdfWidth = usableWidth;
+      const elementPdfHeight = (elementImgProps.height * elementPdfWidth) / elementImgProps.width;
+
+      // Se o elemento atual for um título de seção (h4 com classe section-title) e
+      // não houver espaço suficiente para ele e um pouco de conteúdo (ex: 20pt)
+      // na página atual, adiciona uma nova página.
+      if (element.tagName === 'H4' && element.classList.contains('section-title') && (currentY + elementPdfHeight + 20 > pdfHeight - margin.bottom)) {
+          pdf.addPage();
+          currentY = margin.top; // Reinicia a posição Y na nova página
+      }
+      // Se o elemento não couber na página atual, adicione uma nova página
+      else if (currentY + elementPdfHeight > pdfHeight - margin.bottom) {
+        pdf.addPage();
+        currentY = margin.top; // Reinicia a posição Y na nova página
+      }
+      
+      // Adiciona o elemento à página atual
+      pdf.addImage(elementImgData, 'PNG', margin.left, currentY, elementPdfWidth, elementPdfHeight);
+      currentY += elementPdfHeight; // Atualiza a posição Y para o próximo elemento
+
+      // Adiciona um pequeno espaçamento entre elementos no PDF
+      currentY += 5; // Pequeno espaçamento em pontos
+    }
+
+    curriculoDiv.style.display = originalDisplay; // Restaura o display original
+
+    pdf.save('curriculo.pdf');
+  }
+</script>
+
+</body>
+</html>
